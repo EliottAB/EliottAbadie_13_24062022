@@ -8,6 +8,7 @@
 .main-nav a {
     font-weight: bold;
     color: #2c3e50;
+    height: 54.3833px;
 }
 
 .main-nav a.router-link-exact-active {
@@ -33,6 +34,10 @@
     width: 200px;
 }
 
-.fa-user-circle{
-    margin-right: .3em;
+.main-nav .fa-user-circle{
+    margin-right: .28rem;
+}
+
+.main-nav .fa-sign-out{
+    margin: 0 .28rem;
 }
