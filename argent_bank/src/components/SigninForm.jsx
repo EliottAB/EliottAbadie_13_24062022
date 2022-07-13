@@ -33,8 +33,7 @@ export function SigninForm(){
         }
     }
 
-    function getUserDatas(JWTtoken){
-        console.log(JWTtoken)
+    function login(JWTtoken){
         fetch('http://localhost:3001/api/v1/user/profile', {
             method: 'POST',
             headers: {
@@ -48,7 +47,6 @@ export function SigninForm(){
             if(data.message !== "Successfully got user profile data"){
                 console.log("Une erreur s'est produite")
             }else{
-                console.log(data)
                 dispatch(updateUser({
                     firstName: data.body.firstName,
                     lastName: data.body.lastName,
@@ -62,7 +60,7 @@ export function SigninForm(){
         });
     }
 
-    function login(){
+    function authentification(){
         fetch('http://localhost:3001/api/v1/user/login', {
             method: 'POST',
             headers: {
@@ -80,8 +78,10 @@ export function SigninForm(){
             if (data.body && data.body.token) {
                 if (rememberMe) {
                     localStorage.setItem("token", data.body.token)
+                }else{
+                    sessionStorage.setItem("token", data.body.token)
                 }
-                getUserDatas(data.body.token)
+                login(data.body.token)
                 return navigate("/user")
             }
         })
@@ -109,7 +109,7 @@ export function SigninForm(){
                 <input type="checkbox" id="remember-me" onChange={(event) => {rememberMe = !rememberMe}}/>
                 <label htmlFor="remember-me">Remember me</label>
             </div>
-                <button className="sign-in-button" type="button" onClick={login}>Sign In</button>
+                <button className="sign-in-button" type="button" onClick={authentification}>Sign In</button>
             </form>
         </section>
     )

@@ -5,9 +5,6 @@ import { User } from "./pages/User";
 import { Provider } from "react-redux";
 import { store } from "./store.js";
 
-
-
-
 function App() {
 
   return (
