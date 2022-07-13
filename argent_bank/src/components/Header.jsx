@@ -2,8 +2,12 @@ import "../css/components/header.css"
 import 'font-awesome/css/font-awesome.min.css';
 import LOGO from "../img/argentBankLogo.png"
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export function Header(props){
+
+    const user = useSelector(state => state.user)
+
     return(
         <header>
             <nav className="main-nav">
@@ -15,14 +19,14 @@ export function Header(props){
                     />
                     <h1 className="sr-only">Argent Bank</h1>
                 </Link>
-                {props.logout ?
+                {user.isloged ?
                 <div>
-                    <Link class="main-nav-item" to="/user">
-                        <i class="fa fa-user-circle"></i>
-                        Tony
+                    <Link className="main-nav-item" to="/user">
+                        <i className="fa fa-user-circle"></i>
+                        {user.firstName}
                     </Link>
-                    <Link class="main-nav-item" to="/">
-                        <i class="fa fa-sign-out"></i>
+                    <Link className="main-nav-item" to="/">
+                        <i className="fa fa-sign-out"></i>
                         Sign Out
                     </Link>
                 </div>
