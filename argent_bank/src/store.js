@@ -26,7 +26,7 @@ const userSlice = createSlice({
     }
 })
 
-export const {changeFirstName, changeLastName, updateUser} = userSlice.actions
+export const {updateUser} = userSlice.actions
 
 export const store = configureStore({
     reducer: {

@@ -47,13 +47,14 @@ export function Header(){
             login(localStorage.getItem("token"))
             return
         }
-        dispatch(updateUser({
-            isloged: false
-        }))
+        logout()
     }, [])
     
     function logout(){
         dispatch(updateUser({
+            firstName: "",
+            lastName: "",
+            email: "",
             isloged: false
         }))
         localStorage.removeItem("token")
