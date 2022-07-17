@@ -4,14 +4,14 @@ import LOGO from "../img/argentBankLogo.png"
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store";
-import { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 
-export function Header(){
+export const Header = React.memo(() => {
 
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
 
-    function login(JWTtoken){
+    const login = useCallback((JWTtoken) => {
         fetch('http://localhost:3001/api/v1/user/profile', {
             method: 'POST',
             headers: {
@@ -36,7 +36,18 @@ export function Header(){
         .catch((error) => {
             console.log(error)
         });
-    }
+    }, [dispatch])
+
+    const logout = useCallback(() => {
+        dispatch(updateUser({
+            firstName: "",
+            lastName: "",
+            email: "",
+            isloged: false
+        }))
+        localStorage.removeItem("token")
+        sessionStorage.removeItem("token")
+    }, [dispatch])
 
     useEffect(() => {
         if((sessionStorage.getItem("token"))){
@@ -48,18 +59,8 @@ export function Header(){
             return
         }
         logout()
-    }, [])
-    
-    function logout(){
-        dispatch(updateUser({
-            firstName: "",
-            lastName: "",
-            email: "",
-            isloged: false
-        }))
-        localStorage.removeItem("token")
-        sessionStorage.removeItem("token")
-    }
+        
+    }, [login, logout])
 
     return(
         <header>
@@ -97,4 +98,4 @@ export function Header(){
             </nav>
         </header>
     )
-}
+})

@@ -35,7 +35,7 @@ export function User(){
     })
 
     function editName(){
-        if (firstName.length > 2 && lastName.length > 2 && !firstName.match(/[^a-zà-ú]/) && !lastName.match(/[^a-zà-ú]/)) {
+        if (firstName.length > 2 && lastName.length > 2 && !firstName.match(/[^A-zÀ-ú]/) && !lastName.match(/[^A-zÀ-ú]/)) {
             const JWTtoken = (localStorage.getItem("token") === null) ? sessionStorage.getItem("token") : localStorage.getItem("token")
             fetch('http://localhost:3001/api/v1/user/profile', {
                 method: 'PUT',

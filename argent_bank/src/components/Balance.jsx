@@ -1,6 +1,7 @@
+import React from "react"
 import "../css/components/balance.css"
 
-export function Balance(props){
+export const Balance = React.memo((props) => {
 
     return(
         <section className="account">
@@ -15,4 +16,4 @@ export function Balance(props){
         </section>
     )
 
-}
+})
