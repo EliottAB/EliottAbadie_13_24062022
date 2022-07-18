@@ -5,38 +5,12 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store";
 import React, { useCallback, useEffect } from "react";
+import { login } from "../login";
 
 export const Header = React.memo(() => {
 
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
-
-    const login = useCallback((JWTtoken) => {
-        fetch('http://localhost:3001/api/v1/user/profile', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": 'Bearer ' + JWTtoken
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.message !== "Successfully got user profile data"){
-                console.log("Une erreur s'est produite")
-            }else{
-                dispatch(updateUser({
-                    firstName: data.body.firstName,
-                    lastName: data.body.lastName,
-                    email: data.body.email,
-                    isloged: true
-                }))
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-        });
-    }, [dispatch])
 
     const logout = useCallback(() => {
         dispatch(updateUser({
@@ -51,16 +25,16 @@ export const Header = React.memo(() => {
 
     useEffect(() => {
         if((sessionStorage.getItem("token"))){
-            login(sessionStorage.getItem("token"))
+            login(dispatch, updateUser, sessionStorage.getItem("token"))
             return
         }
         if (localStorage.getItem("token")) {
-            login(localStorage.getItem("token"))
+            login(dispatch, updateUser, localStorage.getItem("token"))
             return
         }
         logout()
         
-    }, [login, logout])
+    }, [logout, dispatch])
 
     return(
         <header>

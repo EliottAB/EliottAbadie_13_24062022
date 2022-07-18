@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { updateUser } from "../store"
 import "../css/components/signinform.css"
+import { login } from "../login"
 
 export function SigninForm(){
 
@@ -33,33 +34,6 @@ export function SigninForm(){
         }
     }
 
-    function login(JWTtoken){
-        fetch('http://localhost:3001/api/v1/user/profile', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                "Authorization": 'Bearer ' + JWTtoken
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.message !== "Successfully got user profile data"){
-                console.log("Une erreur s'est produite")
-            }else{
-                dispatch(updateUser({
-                    firstName: data.body.firstName,
-                    lastName: data.body.lastName,
-                    email: data.body.email,
-                    isloged: true
-                }))
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-        });
-    }
-
     function authentification(){
         fetch('http://localhost:3001/api/v1/user/login', {
             method: 'POST',
@@ -81,7 +55,7 @@ export function SigninForm(){
                 }else{
                     sessionStorage.setItem("token", data.body.token)
                 }
-                login(data.body.token)
+                login(dispatch, updateUser, data.body.token)
                 return navigate("/user")
             }
         })
