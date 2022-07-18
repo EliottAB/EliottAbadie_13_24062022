@@ -14,11 +14,15 @@ export function User(){
     const [editmode, edit] = useState(false)
     const [firstName, changeFirstName] = useState("")
     const [lastName, changeLastName] = useState("")
+    const [wrongFirstName, setFirstNameError] = useState()
+    const [wrongLastName, setLastNameError] = useState()
     const dispatch = useDispatch()
 
     function cancel(){
         changeFirstName("")
         changeLastName("")
+        setFirstNameError(null)
+        setLastNameError(null)
         edit(false)
     }
 
@@ -33,6 +37,18 @@ export function User(){
             editName()
         }
     })
+
+    function checkname(name, setError){
+        if (name.length < 3) {
+            setError("should have 3 or more characters")   
+        }else{
+            if (name.match(/[^A-zÀ-ú]/)) {
+                setError("your name include something wrong")
+            }else{
+                setError(null)
+            }
+        }
+    }
 
     function editName(){
         if (firstName.length > 2 && lastName.length > 2 && !firstName.match(/[^A-zÀ-ú]/) && !lastName.match(/[^A-zÀ-ú]/)) {
@@ -66,6 +82,9 @@ export function User(){
             .catch((error) => {
                 console.log(error)
             });
+        }else{
+            checkname(firstName, setFirstNameError)
+            checkname(lastName, setLastNameError)
         }
     }
 
@@ -75,26 +94,32 @@ export function User(){
             <Header/>
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Welcome back<br />
                         {
-                        editmode ?
+                            editmode ?
                         <React.Fragment>
-                            <input className="editname-input first" type="text" placeholder={user.firstName} onChange={(e) => changeFirstName(e.target.value)} value={firstName} maxLength={20}/>
-                            <input className="editname-input second" type="text" placeholder={user.lastName} onChange={(e) => changeLastName(e.target.value)} value={lastName} maxLength={20}/>
+                            <h1>Welcome back<br /></h1>
+                            <form className="edit-name">
+                                <div className="edit-firstname">
+                                    <input type="text" placeholder={user.firstName} onChange={(e) => changeFirstName(e.target.value)} value={firstName} maxLength={20}/>
+                                    {wrongFirstName ? <p className="wrongname">{wrongFirstName}</p> : null}
+                                </div>
+                                <div className="edit-lastname">
+                                    <input type="text" placeholder={user.lastName} onChange={(e) => changeLastName(e.target.value)} value={lastName} maxLength={20}/>
+                                    {wrongLastName ? <p className="wrongname">{wrongLastName}</p> : null}
+                                </div>
+                                    <button className="edit-button cancel" type="button" onClick={cancel}>cancel</button>
+                                    <button className="edit-button confirm" type="button" onClick={editName}>confirm</button>
+                            </form>
                         </React.Fragment>
 
-                        : `${user.firstName} ${user.lastName} !`
-                        }
-                    </h1>
-                    {
-                    editmode ? 
+                        : 
                         <React.Fragment>
-                            <button className="cancel-button" onClick={cancel}>cancel</button>
-                            <button className="edit-button confirm" onClick={editName}>confirm</button>
+                            <h1>Welcome back<br />
+                                {`${user.firstName} ${user.lastName} !`}
+                            </h1>
+                            <button className="edit-button" onClick={() => edit(true)}>Edit name</button>
                         </React.Fragment>
-                    : 
-                        <button className="edit-button" onClick={() => edit(true)}>Edit name</button>
-                    }
+                        }
                 </div>
                 <h2 className="sr-only">Accounts</h2>
                 <Balance title="Argent Bank Checking (x8349)" amount="$2,082.79" description="Available Balance"/>
