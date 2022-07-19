@@ -4,37 +4,13 @@ import LOGO from "../img/argentBankLogo.png"
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store";
-import React, { useCallback, useEffect } from "react";
-import { login } from "../login";
+import React from "react";
+import { logout } from "../utils/logout";
 
 export const Header = React.memo(() => {
 
     const user = useSelector(state => state.user)
     const dispatch = useDispatch()
-
-    const logout = useCallback(() => {
-        dispatch(updateUser({
-            firstName: "",
-            lastName: "",
-            email: "",
-            isloged: false
-        }))
-        localStorage.removeItem("token")
-        sessionStorage.removeItem("token")
-    }, [dispatch])
-
-    useEffect(() => {
-        if((sessionStorage.getItem("token"))){
-            login(dispatch, updateUser, sessionStorage.getItem("token"))
-            return
-        }
-        if (localStorage.getItem("token")) {
-            login(dispatch, updateUser, localStorage.getItem("token"))
-            return
-        }
-        logout()
-        
-    }, [logout, dispatch])
 
     return(
         <header>
@@ -54,7 +30,7 @@ export const Header = React.memo(() => {
                             <i className="fa fa-user-circle"></i>
                             {user.firstName}
                         </Link>
-                        <Link className="main-nav-item" to="/" onClick={logout}>
+                        <Link className="main-nav-item" to="/" onClick={() => logout(dispatch, updateUser)}>
                             <i className="fa fa-sign-out"></i>
                             Sign Out
                         </Link>

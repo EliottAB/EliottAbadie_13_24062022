@@ -1,14 +1,31 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom"
 import { Home } from "./pages/Home";
 import { Signin } from "./pages/Signin";
 import { User } from "./pages/User";
-import { Provider } from "react-redux";
-import { store } from "./store.js";
+import { updateUser } from "./store";
+import { login } from "./utils/login";
+import { logout } from "./utils/logout";
 
 function App() {
 
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    if((sessionStorage.getItem("token"))){
+        login(dispatch, updateUser, sessionStorage.getItem("token"))
+        return
+    }
+    if (localStorage.getItem("token")) {
+        login(dispatch, updateUser, localStorage.getItem("token"))
+        return
+    }
+    logout(dispatch, updateUser)
+  }, [dispatch])
+
   return (
-    <Provider store={store}>
       <div className="App">
         <Routes>
           <Route path="/" element={<Home/>}/>
@@ -16,7 +33,6 @@ function App() {
           <Route path="/user" element={<User/>}/>
         </Routes>
       </div>
-      </Provider>
   );
 }
 

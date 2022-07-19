@@ -16,7 +16,7 @@ export function Signin(){
             </main>
             <Footer/>
         </React.Fragment>
-        : <Navigate to="/user"/>
+        : <Navigate replace to="/user"/>
     )
 
 }

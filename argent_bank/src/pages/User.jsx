@@ -128,7 +128,7 @@ export function User(){
             </main>
             <Footer/>
         </React.Fragment>
-        : <Navigate to="/sign-in"/>
+        : <Navigate replace to="/sign-in"/>
     )
 
 }
