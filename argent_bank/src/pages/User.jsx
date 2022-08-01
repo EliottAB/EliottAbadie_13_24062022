@@ -26,17 +26,14 @@ export function User(){
         edit(false)
     }
 
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && editmode === false) {
+    window.onkeydown = (e) => {
+        if (e.key === "Escape" && editmode === true) {
             cancel()
         }
-    })
-
-    window.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && editmode === true) {
             editName()
         }
-    })
+    }
 
     function checkname(name, setError){
         if (name.length < 3) {
